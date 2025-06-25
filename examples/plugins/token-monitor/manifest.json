@@ -1,0 +1,29 @@
+{
+  "name": "token-monitor",
+  "version": "1.0.0",
+  "description": "Monitors token usage and sends alerts when thresholds are exceeded",
+  "author": "Claude Code Wrapper Team",
+  "license": "MIT",
+  "main": "./index.js",
+  "dependencies": [],
+  "priority": 20,
+  "timeout": 5000,
+  "capabilities": ["monitoring", "alerts"],
+  "config": {
+    "dailyLimit": {
+      "type": "number",
+      "default": 100000,
+      "description": "Daily token limit"
+    },
+    "warningThreshold": {
+      "type": "number",
+      "default": 0.8,
+      "description": "Warning threshold (percentage of daily limit)"
+    },
+    "alertWebhook": {
+      "type": "string",
+      "required": false,
+      "description": "Webhook URL for alerts"
+    }
+  }
+}

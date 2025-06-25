@@ -1,0 +1,44 @@
+{
+  "name": "rate-limiter",
+  "version": "1.0.0",
+  "description": "Rate limits queries to prevent hitting API limits",
+  "author": "Claude Code Wrapper Team",
+  "license": "MIT",
+  "main": "./index.js",
+  "dependencies": [],
+  "priority": 5,
+  "timeout": 5000,
+  "capabilities": ["rate-limiting", "throttling"],
+  "config": {
+    "limits": {
+      "type": "object",
+      "default": {
+        "perMinute": 10,
+        "perHour": 100,
+        "perDay": 1000
+      },
+      "description": "Rate limits for different time windows"
+    },
+    "strategy": {
+      "type": "string",
+      "default": "sliding",
+      "enum": ["sliding", "fixed"],
+      "description": "Rate limiting strategy"
+    },
+    "queueEnabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Queue requests when rate limited"
+    },
+    "queueSize": {
+      "type": "number",
+      "default": 50,
+      "description": "Maximum queue size"
+    },
+    "burstSize": {
+      "type": "number",
+      "default": 5,
+      "description": "Allow burst of requests"
+    }
+  }
+}

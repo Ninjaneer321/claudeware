@@ -1,0 +1,39 @@
+{
+  "name": "analytics-dashboard",
+  "version": "1.0.0",
+  "description": "Real-time analytics dashboard for Claude usage patterns",
+  "author": "Claude Code Wrapper Team",
+  "license": "MIT",
+  "main": "./index.js",
+  "dependencies": [],
+  "priority": 30,
+  "timeout": 5000,
+  "capabilities": ["analytics", "reporting", "web-server"],
+  "config": {
+    "port": {
+      "type": "number",
+      "default": 3333,
+      "description": "Dashboard web server port"
+    },
+    "host": {
+      "type": "string",
+      "default": "localhost",
+      "description": "Dashboard web server host"
+    },
+    "updateInterval": {
+      "type": "number",
+      "default": 5000,
+      "description": "Dashboard update interval in milliseconds"
+    },
+    "retentionDays": {
+      "type": "number",
+      "default": 30,
+      "description": "Days of data to retain for analytics"
+    },
+    "enableWebSocket": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable real-time updates via WebSocket"
+    }
+  }
+}

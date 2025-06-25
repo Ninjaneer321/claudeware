@@ -1,0 +1,39 @@
+{
+  "name": "cache",
+  "version": "1.0.0",
+  "description": "Caches Claude responses to speed up repeated queries",
+  "author": "Claude Code Wrapper Team",
+  "license": "MIT",
+  "main": "./index.js",
+  "dependencies": [],
+  "priority": 10,
+  "timeout": 5000,
+  "capabilities": ["caching", "performance"],
+  "config": {
+    "cacheSize": {
+      "type": "number",
+      "default": 100,
+      "description": "Maximum number of cached entries"
+    },
+    "ttl": {
+      "type": "number",
+      "default": 3600000,
+      "description": "Time to live in milliseconds (default: 1 hour)"
+    },
+    "similarity": {
+      "type": "number", 
+      "default": 0.95,
+      "description": "Similarity threshold for fuzzy matching (0-1)"
+    },
+    "persistCache": {
+      "type": "boolean",
+      "default": true,
+      "description": "Persist cache to disk between sessions"
+    },
+    "cachePath": {
+      "type": "string",
+      "default": "~/.claude-code/cache/responses.json",
+      "description": "Path to cache file"
+    }
+  }
+}
