@@ -1,13 +1,13 @@
 export interface WrapperConfig {
   mode: 'development' | 'production';
   claudePath: string;
-  
+
   wrapper: {
     timeout: number;
     bufferSize: number;
     gracefulShutdownTimeout: number;
   };
-  
+
   plugins: {
     directory: string;
     timeout: number;
@@ -15,7 +15,7 @@ export interface WrapperConfig {
     enabledPlugins?: string[];
     disabledPlugins?: string[];
   };
-  
+
   database: {
     type: 'sqlite' | 'supabase';
     path?: string;
@@ -24,14 +24,14 @@ export interface WrapperConfig {
     flushInterval: number;
     walMode: boolean;
   };
-  
+
   monitoring: {
     enabled: boolean;
     metricsPort?: number;
     logLevel: 'debug' | 'info' | 'warn' | 'error';
     logPath?: string;
   };
-  
+
   categorization: {
     cacheSize: number;
     patterns: CategorizationPattern[];

@@ -1,6 +1,6 @@
 # Testing Guide
 
-This guide covers all aspects of testing the Claude Code Wrapper.
+This guide covers all aspects of testing the Claudeware.
 
 ## Table of Contents
 
@@ -150,7 +150,7 @@ const { ClaudeWrapper } = require('../src/wrapper');
 const { Readable, Writable } = require('stream');
 
 async function quickTest() {
-  console.log('🧪 Claude Code Wrapper Quick Test\n');
+  console.log('🧪 Claudeware Quick Test\n');
 
   const config = {
     mode: 'development',
@@ -213,13 +213,13 @@ Create `test/manual/interactive-test.sh`:
 ```bash
 #!/bin/bash
 
-echo "🧪 Claude Code Wrapper Interactive Test"
+echo "🧪 Claudeware Interactive Test"
 echo "======================================"
 echo
 
 # Test 1: Basic functionality
 echo "Test 1: Basic query"
-./claude-code-wrapper "What is 2+2?"
+./claudeware "What is 2+2?"
 echo
 
 # Test 2: Plugin loading
@@ -234,7 +234,7 @@ echo
 
 # Test 4: With environment variables
 echo "Test 4: Debug mode"
-CLAUDE_WRAPPER_LOG_LEVEL=debug ./claude-code-wrapper "test debug"
+CLAUDE_WRAPPER_LOG_LEVEL=debug ./claudeware "test debug"
 echo
 
 echo "✅ Interactive tests completed"
@@ -340,7 +340,7 @@ Create `test/e2e/full-system.test.sh`:
 
 set -e
 
-echo "🚀 Claude Code Wrapper E2E Test"
+echo "🚀 Claudeware E2E Test"
 echo "================================"
 
 # Setup
@@ -354,7 +354,7 @@ rm -f $CLAUDE_WRAPPER_DB_PATH
 
 # Test 1: CLI with plugins
 echo -e "\n📝 Test 1: CLI with query collection"
-./claude-code-wrapper --enable-plugins query-collector,token-monitor "Explain recursion"
+./claudeware --enable-plugins query-collector,token-monitor "Explain recursion"
 
 # Test 2: Check database
 echo -e "\n📊 Test 2: Verify data collection"
@@ -383,12 +383,12 @@ const { createWrappedSDK } = require('./src/sdk');
 
 # Test 4: Plugin communication
 echo -e "\n🔌 Test 4: Plugin communication"
-./claude-code-wrapper --enable-plugins cache,rate-limiter "What is AI?"
-./claude-code-wrapper --enable-plugins cache,rate-limiter "What is AI?" # Should hit cache
+./claudeware --enable-plugins cache,rate-limiter "What is AI?"
+./claudeware --enable-plugins cache,rate-limiter "What is AI?" # Should hit cache
 
 # Test 5: Analytics dashboard
 echo -e "\n📈 Test 5: Analytics dashboard"
-./claude-code-wrapper --enable-plugins analytics-dashboard --no-wait "Start dashboard test" &
+./claudeware --enable-plugins analytics-dashboard --no-wait "Start dashboard test" &
 DASHBOARD_PID=$!
 sleep 2
 
@@ -482,7 +482,7 @@ Create `test/run-all-tests.sh`:
 ```bash
 #!/bin/bash
 
-echo "🧪 Running all Claude Code Wrapper tests"
+echo "🧪 Running all Claudeware tests"
 echo "========================================"
 
 # Unit tests
@@ -565,4 +565,4 @@ npm test
 
 ---
 
-This testing guide ensures the Claude Code Wrapper is thoroughly tested at all levels!
+This testing guide ensures the Claudeware is thoroughly tested at all levels!

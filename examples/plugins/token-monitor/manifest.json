@@ -2,7 +2,7 @@
   "name": "token-monitor",
   "version": "1.0.0",
   "description": "Monitors token usage and sends alerts when thresholds are exceeded",
-  "author": "Claude Code Wrapper Team",
+  "author": "Claudeware Team",
   "license": "MIT",
   "main": "./index.js",
   "dependencies": [],

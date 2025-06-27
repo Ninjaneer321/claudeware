@@ -11,19 +11,19 @@ export class JsonStreamParser {
   /**
    * Parse a chunk of data that may contain zero or more JSON objects
    * Handles partial chunks by buffering incomplete data
-   * 
+   *
    * @param chunk - Raw data chunk (string or Buffer)
    * @returns Array of parsed JSON objects (empty if none found)
    */
   parse(chunk: Buffer | string): any[] {
     const results: any[] = [];
-    
+
     try {
       // Convert Buffer to string if needed
-      const dataStr = typeof chunk === 'string' 
-        ? chunk 
+      const dataStr = typeof chunk === 'string'
+        ? chunk
         : chunk.toString('utf8');
-      
+
       // Handle empty input
       if (!dataStr || dataStr.trim().length === 0) {
         return results;
@@ -38,7 +38,7 @@ export class JsonStreamParser {
 
       // Combine with existing buffer
       const combined = this.buffer + dataStr;
-      
+
       // Update timestamp when adding to buffer
       if (dataStr.trim()) {
         this.lastChunkTime = Date.now();
@@ -53,7 +53,7 @@ export class JsonStreamParser {
 
       // Try different parsing strategies
       const parsed = this.tryParsing(this.buffer);
-      
+
       if (parsed.results.length > 0) {
         results.push(...parsed.results);
         this.buffer = parsed.remainder;
@@ -111,10 +111,10 @@ export class JsonStreamParser {
    * @param data - Data to parse
    * @returns Parse result
    */
-  private tryParseComplete(data: string): { 
-    parsed: boolean; 
-    results: any[]; 
-    remainder: string 
+  private tryParseComplete(data: string): {
+    parsed: boolean;
+    results: any[];
+    remainder: string
   } {
     try {
       // Trim whitespace
@@ -139,7 +139,7 @@ export class JsonStreamParser {
   private tryParseLines(data: string): { results: any[]; remainder: string } {
     const results: any[] = [];
     const lines = data.split('\n');
-    
+
     // Process all complete lines
     for (let i = 0; i < lines.length - 1; i++) {
       const line = lines[i].trim();
@@ -154,7 +154,7 @@ export class JsonStreamParser {
 
     // Last line might be incomplete - keep it in buffer
     const lastLine = lines[lines.length - 1];
-    
+
     // Try to parse the last line if it looks complete
     if (lastLine.trim()) {
       const parsed = this.tryParseLine(lastLine);

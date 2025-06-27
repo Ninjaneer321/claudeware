@@ -2,7 +2,7 @@
   "name": "rate-limiter",
   "version": "1.0.0",
   "description": "Rate limits queries to prevent hitting API limits",
-  "author": "Claude Code Wrapper Team",
+  "author": "Claudeware Team",
   "license": "MIT",
   "main": "./index.js",
   "dependencies": [],

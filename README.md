@@ -1,4 +1,4 @@
-# Claude Code Wrapper
+# Claudeware
 
 A powerful middleware system for Claude Code that enables query collection, analysis, and optimization through a plugin-based architecture - all with **zero latency impact** on CLI output.
 
@@ -32,17 +32,17 @@ A powerful middleware system for Claude Code that enables query collection, anal
 - Claude Code CLI installed and authenticated
 - TypeScript (for development)
 
-### Install from npm (coming soon)
+### Install from npm
 
 ```bash
-npm install -g claude-code-wrapper
+npm install -g @timmytown/claudeware
 ```
 
 ### Install from source
 
 ```bash
-git clone https://github.com/instantlyeasy/claude-code-wrapper.git
-cd claude-code-wrapper
+git clone https://github.com/instantlyeasy/claudeware.git
+cd claudeware
 npm install
 npm run build
 npm link
@@ -64,23 +64,26 @@ claude-code "Create a React component for a todo list"
 ### SDK Usage
 
 ```typescript
-import { createWrappedSDK } from 'claude-code-wrapper';
+import { createWrappedSDK } from '@timmytown/claudeware';
 
-// Create wrapped SDK instance
-const { query, getMetrics } = createWrappedSDK({
+// Create wrapped SDK instance  
+const wrappedClaude = createWrappedSDK({
   pluginDirectory: '~/.claude-code/plugins',
   databasePath: './queries.db'
 });
 
-// Use like normal Claude Code SDK
-for await (const message of query('Hello Claude')) {
-  console.log(message);
-}
+// Use exactly like the Claude Code SDK
+const result = await wrappedClaude()
+  .withModel('sonnet')
+  .query('Hello Claude')
+  .asText();
 
 // Get metrics from plugins
-const metrics = await getMetrics();
-console.log('Queries processed:', metrics.eventBus.totalEvents);
+const metrics = await wrappedClaude.getMetrics();
+console.log('Tokens used:', metrics.sessionMetrics.totalTokens);
 ```
+
+📚 **See the [SDK integration examples](examples/sdk-integration/) for comprehensive usage patterns with the Claude Code SDK TypeScript library.**
 
 ## Architecture
 
@@ -255,7 +258,7 @@ mkdir -p ~/.claude-code/plugins/my-plugin
 The wrapper provides seamless SDK integration:
 
 ```typescript
-import { createWrappedSDK } from 'claude-code-wrapper';
+import { createWrappedSDK } from 'claudeware';
 import { claude } from '@instantlyeasy/claude-code-sdk-ts';
 
 // Option 1: Use wrapped SDK factory
@@ -320,8 +323,8 @@ const expensiveSimpleQueries = db.prepare(`
 
 ```bash
 # Clone repository
-git clone https://github.com/instantlyeasy/claude-code-wrapper.git
-cd claude-code-wrapper
+git clone https://github.com/instantlyeasy/claudeware.git
+cd claudeware
 
 # Install dependencies
 npm install
@@ -356,7 +359,7 @@ npm run test:integration
 ### Project Structure
 
 ```
-claude-code-wrapper/
+claudeware/
 ├── src/
 │   ├── core/               # Core components
 │   │   ├── wrapper.ts      # Main wrapper orchestrator

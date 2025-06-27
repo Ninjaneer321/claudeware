@@ -2,7 +2,7 @@
   "name": "cache",
   "version": "1.0.0",
   "description": "Caches Claude responses to speed up repeated queries",
-  "author": "Claude Code Wrapper Team",
+  "author": "Claudeware Team",
   "license": "MIT",
   "main": "./index.js",
   "dependencies": [],

@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-Get up and running with Claude Code Wrapper in 5 minutes!
+Get up and running with Claudeware in 5 minutes!
 
 ## Prerequisites
 
@@ -14,18 +14,18 @@ Get up and running with Claude Code Wrapper in 5 minutes!
 
 ```bash
 # Install globally
-npm install -g claude-code-wrapper
+npm install -g claudeware
 
 # Verify installation
-claude-code-wrapper --version
+claudeware --version
 ```
 
 ### Option 2: From Source
 
 ```bash
 # Clone repository
-git clone https://github.com/instantlyeasy/claude-code-wrapper.git
-cd claude-code-wrapper
+git clone https://github.com/instantlyeasy/claudeware.git
+cd claudeware
 
 # Install dependencies
 npm install
@@ -54,7 +54,7 @@ claude-code "Create a hello world function in Python"
 
 ```typescript
 // 1. Import the wrapper
-import { createWrappedSDK } from 'claude-code-wrapper';
+import { createWrappedSDK } from 'claudeware';
 
 // 2. Create wrapped instance
 const { query, getMetrics, shutdown } = createWrappedSDK();
@@ -91,7 +91,7 @@ cd ~/.claude-code/plugins/my-first-plugin
 {
   "name": "my-first-plugin",
   "version": "1.0.0",
-  "description": "My first Claude Code plugin",
+  "description": "My first Claudeware plugin",
   "main": "./index.js",
   "timeout": 5000,
   "capabilities": ["logging"]
@@ -292,8 +292,8 @@ console.table(patterns);
 
 1. Check installation:
 ```bash
-which claude-code-wrapper
-claude-code-wrapper --version
+which claudeware
+claudeware --version
 ```
 
 2. Check logs:
@@ -303,7 +303,7 @@ tail -f ~/.claude-code/logs/wrapper.log
 
 3. Test directly:
 ```bash
-claude-code-wrapper test
+claudeware test
 ```
 
 ### Plugin Not Loading
@@ -339,7 +339,7 @@ df -h ~/.claude-code/
 3. Reset database:
 ```bash
 rm ~/.claude-code/queries.db
-claude-code-wrapper init-db
+claudeware init-db
 ```
 
 ## Next Steps
@@ -371,6 +371,6 @@ Now that you have the basics working:
 - 🏗️ [Architecture Guide](./ARCHITECTURE.md)
 - 🔌 [Plugin API](./PLUGIN-API.md)
 - 💬 [Discord Community](https://discord.gg/claude-wrapper)
-- 🐛 [Report Issues](https://github.com/instantlyeasy/claude-code-wrapper/issues)
+- 🐛 [Report Issues](https://github.com/instantlyeasy/claudeware/issues)
 
 Happy querying! 🚀

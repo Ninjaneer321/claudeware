@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Claude Code Wrapper implements a sophisticated architecture that achieves zero-latency passthrough while enabling powerful plugin-based processing. This document explores the technical details of how this is accomplished.
+The Claudeware implements a sophisticated architecture that achieves zero-latency passthrough while enabling powerful plugin-based processing. This document explores the technical details of how this is accomplished.
 
 ## Core Design Principles
 
@@ -426,7 +426,7 @@ Plugins can be distributed:
 
 ## Conclusion
 
-The Claude Code Wrapper architecture achieves its goals through:
+The Claudeware architecture achieves its goals through:
 
 1. **Decoupled Streams**: Zero-latency guarantee
 2. **Event-Driven Design**: Flexible and extensible

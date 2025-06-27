@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * Simple test to demonstrate the Claude Code Wrapper concept
+ * Simple test to demonstrate the Claudeware concept
  */
 
-console.log('🧪 Claude Code Wrapper - Simple Concept Test\n');
+console.log('🧪 Claudeware - Simple Concept Test\n');
 
 // Test 1: Mock the wrapper components
 console.log('Test 1: Component Tests');

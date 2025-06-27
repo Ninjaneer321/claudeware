@@ -1,6 +1,6 @@
 # API Reference
 
-Complete API documentation for Claude Code Wrapper.
+Complete API documentation for Claudeware.
 
 ## Table of Contents
 

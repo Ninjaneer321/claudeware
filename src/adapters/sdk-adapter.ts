@@ -1,9 +1,9 @@
 import { query as sdkQuery, ClaudeCodeOptions, Message } from '@instantlyeasy/claude-code-sdk-ts';
-import { EventBus } from '../plugins/event-bus';
-import { PluginLoader } from '../plugins/plugin-loader';
+import { EventBus, EventMetrics } from '../plugins/event-bus';
+import { PluginLoader, PluginMetrics } from '../plugins/plugin-loader';
 import { PluginContext, QueryEvent, DataStore } from '../types';
 import { SqliteAdapter } from '../database/sqlite-adapter';
-import { BatchQueue } from '../database/batch-queue';
+import { BatchQueue, BatchMetrics } from '../database/batch-queue';
 import pino from 'pino';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -27,7 +27,7 @@ export class SDKWrapperAdapter {
     logLevel?: 'debug' | 'info' | 'warn' | 'error';
   } = {}) {
     this.sessionId = uuidv4();
-    this.logger = pino({ 
+    this.logger = pino({
       level: config.logLevel || 'info',
       name: 'sdk-wrapper-adapter'
     });
@@ -70,7 +70,7 @@ export class SDKWrapperAdapter {
     // Load plugins
     if (this.config.pluginDirectory) {
       const plugins = await this.pluginLoader.loadPlugins(this.config.pluginDirectory);
-      
+
       // Filter enabled plugins if specified
       const enabledPlugins = this.config.enabledPlugins
         ? plugins.filter(p => this.config.enabledPlugins!.includes(p.name))
@@ -95,7 +95,7 @@ export class SDKWrapperAdapter {
    * Enhanced query function that integrates with the plugin system
    */
   async *query(
-    prompt: string, 
+    prompt: string,
     options?: ClaudeCodeOptions
   ): AsyncGenerator<Message> {
     // Ensure initialized
@@ -229,7 +229,11 @@ export class SDKWrapperAdapter {
   /**
    * Get metrics from all plugins
    */
-  async getMetrics() {
+  async getMetrics(): Promise<{
+    eventBus: EventMetrics;
+    batchQueue: BatchMetrics;
+    plugins: PluginMetrics[];
+  }> {
     return {
       eventBus: this.eventBus.getMetrics(),
       batchQueue: this.batchQueue.getMetrics(),
@@ -242,16 +246,16 @@ export class SDKWrapperAdapter {
    */
   async shutdown(): Promise<void> {
     this.logger.info('Shutting down SDK Wrapper Adapter');
-    
+
     // Shutdown plugins
     await this.pluginLoader.shutdown();
-    
+
     // Flush batch queue
     await this.batchQueue.stop();
-    
+
     // Close database
     await this.dataStore.close();
-    
+
     this.initialized = false;
   }
 }
@@ -264,9 +268,17 @@ export function createWrappedSDK(config?: {
   databasePath?: string;
   enabledPlugins?: string[];
   logLevel?: 'debug' | 'info' | 'warn' | 'error';
-}) {
+}): {
+  query: (prompt: string, options?: ClaudeCodeOptions) => AsyncIterable<Message>;
+  getMetrics: () => Promise<{
+    eventBus: EventMetrics;
+    batchQueue: BatchMetrics;
+    plugins: PluginMetrics[];
+  }>;
+  shutdown: () => Promise<void>;
+} {
   const adapter = new SDKWrapperAdapter(config);
-  
+
   return {
     query: adapter.createWrappedQuery(),
     getMetrics: () => adapter.getMetrics(),

@@ -1,11 +1,11 @@
 import Database from 'better-sqlite3';
-import { 
-  DataStore, 
-  QueryRecord, 
-  ResponseRecord, 
-  OptimizationSuggestion, 
+import {
+  DataStore,
+  QueryRecord,
+  ResponseRecord,
+  OptimizationSuggestion,
   QueryStats,
-  DatabaseConfig 
+  DatabaseConfig
 } from '../types';
 
 interface PreparedStatements {
@@ -118,7 +118,7 @@ export class SqliteAdapter implements DataStore {
     this.statements = {
       insertQuery: this.db.prepare(`
         INSERT INTO queries (
-          id, session_id, timestamp, query, model, 
+          id, session_id, timestamp, query, model,
           category, complexity, token_count, metadata
         ) VALUES (
           @id, @session_id, @timestamp, @query, @model,
@@ -162,7 +162,7 @@ export class SqliteAdapter implements DataStore {
       `),
 
       getStats: this.db.prepare(`
-        SELECT 
+        SELECT
           COUNT(*) as total_queries,
           SUM(token_count) as total_tokens,
           AVG(r.latency_ms) as avg_latency,
@@ -282,7 +282,7 @@ export class SqliteAdapter implements DataStore {
   async getQuery(id: string): Promise<QueryRecord | null> {
     try {
       const row = this.statements.getQuery.get(id) as any;
-      
+
       if (!row) {
         return null;
       }
@@ -306,7 +306,7 @@ export class SqliteAdapter implements DataStore {
   async getResponse(queryId: string): Promise<ResponseRecord | null> {
     try {
       const row = this.statements.getResponse.get(queryId) as any;
-      
+
       if (!row) {
         return null;
       }
@@ -332,7 +332,7 @@ export class SqliteAdapter implements DataStore {
   async getSessionQueries(sessionId: string): Promise<QueryRecord[]> {
     try {
       const rows = this.statements.getSessionQueries.all(sessionId) as any[];
-      
+
       return rows.map(row => ({
         id: row.id,
         sessionId: row.session_id,
@@ -357,8 +357,8 @@ export class SqliteAdapter implements DataStore {
       };
 
       // Get aggregate stats
-      const statsQuery = timeRange 
-        ? `SELECT 
+      const statsQuery = timeRange
+        ? `SELECT
             COUNT(*) as total_queries,
             SUM(token_count) as total_tokens,
             AVG(r.latency_ms) as avg_latency,
@@ -366,7 +366,7 @@ export class SqliteAdapter implements DataStore {
           FROM queries q
           LEFT JOIN responses r ON q.id = r.query_id
           WHERE q.timestamp >= ? AND q.timestamp <= ?`
-        : `SELECT 
+        : `SELECT
             COUNT(*) as total_queries,
             SUM(token_count) as total_tokens,
             AVG(r.latency_ms) as avg_latency,
@@ -375,7 +375,7 @@ export class SqliteAdapter implements DataStore {
           LEFT JOIN responses r ON q.id = r.query_id`;
 
       const statsStmt = this.db.prepare(statsQuery);
-      const stats = timeRange 
+      const stats = timeRange
         ? statsStmt.get(params.start, params.end) as any
         : statsStmt.get() as any;
 
@@ -395,7 +395,7 @@ export class SqliteAdapter implements DataStore {
       const categoryRows = timeRange
         ? categoryStmt.all(params.start, params.end) as any[]
         : categoryStmt.all() as any[];
-      
+
       const categoryCounts: Record<string, number> = {};
       for (const row of categoryRows) {
         categoryCounts[row.category] = row.count;
@@ -417,7 +417,7 @@ export class SqliteAdapter implements DataStore {
       const modelRows = timeRange
         ? modelStmt.all(params.start, params.end) as any[]
         : modelStmt.all() as any[];
-      
+
       const modelUsage: Record<string, number> = {};
       for (const row of modelRows) {
         modelUsage[row.model] = row.count;
@@ -429,8 +429,8 @@ export class SqliteAdapter implements DataStore {
         averageLatency: stats?.avg_latency || 0,
         categoryCounts,
         modelUsage,
-        errorRate: stats?.total_queries > 0 
-          ? (stats?.error_count || 0) / stats.total_queries 
+        errorRate: stats?.total_queries > 0
+          ? (stats?.error_count || 0) / stats.total_queries
           : 0
       };
     } catch (error) {
@@ -444,8 +444,8 @@ export class SqliteAdapter implements DataStore {
         this.db.close();
       }
     } catch (error) {
-      // Log but don't throw on close errors
-      console.error('Error closing database:', error);
+      // Silently ignore close errors - they're not critical
+      // and we don't want to throw during cleanup
     }
   }
 

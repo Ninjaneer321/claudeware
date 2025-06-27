@@ -15,7 +15,7 @@ export interface StreamMetrics {
 
 /**
  * StreamHandler implements zero-latency passthrough with decoupled processing
- * 
+ *
  * Key features:
  * - Direct pipe for zero-latency passthrough
  * - Separate data listener for JSON parsing
@@ -46,14 +46,14 @@ export class StreamHandler {
   /**
    * Setup direct passthrough pipe from source to destination
    * This creates a zero-latency kernel-managed pipe
-   * 
+   *
    * @param source - Readable stream (e.g., child.stdout)
    * @param destination - Writable stream (e.g., process.stdout)
    */
   setupPassthrough(source: Readable, destination: Writable): void {
     // Direct pipe - no processing, no delay
     source.pipe(destination);
-    
+
     // Track for cleanup
     this.passthroughStreams.set(source, destination);
   }
@@ -61,7 +61,7 @@ export class StreamHandler {
   /**
    * Setup processing stream with JSON parsing
    * Uses a separate data listener that doesn't affect passthrough
-   * 
+   *
    * @param source - Readable stream to process
    * @param processor - Optional processor stream (for testing)
    */
@@ -69,7 +69,7 @@ export class StreamHandler {
     // Create data listener for processing
     const dataListener = (chunk: Buffer | string) => {
       const startTime = Date.now();
-      
+
       try {
         // Update metrics
         const chunkSize = Buffer.isBuffer(chunk) ? chunk.length : Buffer.byteLength(chunk);
@@ -80,7 +80,7 @@ export class StreamHandler {
 
         // Parse JSON chunks
         const events = this.parser.parse(chunkStr);
-        
+
         // Emit parsed events (ensure events is iterable)
         if (events && Array.isArray(events)) {
           for (const event of events) {
@@ -102,7 +102,7 @@ export class StreamHandler {
         }
       } catch (error) {
         this.metrics.parseErrors++;
-        
+
         // Emit error event with context
         const parseError: any = new Error('Parse error in stream processing');
         parseError.cause = error;
@@ -134,9 +134,9 @@ export class StreamHandler {
     // Check if we should emit a warning
     if (this.metrics.backpressureEvents >= this.BACKPRESSURE_WARNING_THRESHOLD &&
         this.metrics.backpressureEvents !== this.lastBackpressureCount) {
-      
+
       this.lastBackpressureCount = this.metrics.backpressureEvents;
-      
+
       this.eventBus.emit('backpressure-warning', {
         count: this.metrics.backpressureEvents,
         message: `Processing stream experiencing backpressure (${this.metrics.backpressureEvents} events)`

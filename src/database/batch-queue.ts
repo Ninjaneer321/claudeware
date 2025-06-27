@@ -51,15 +51,15 @@ export class BatchQueue<T> extends EventEmitter {
   private isFlushScheduled: boolean = false;
   private flushPromises: Promise<void>[] = [];
   private timers: TimerFunctions;
-  
+
   private readonly options: Required<BatchQueueOptions<T>>;
 
   constructor(options: BatchQueueOptions<T>) {
     super();
-    
+
     // Validate configuration
     this.validateOptions(options);
-    
+
     // Set defaults for optional parameters
     this.options = {
       ...options,
@@ -68,7 +68,7 @@ export class BatchQueue<T> extends EventEmitter {
       maxConcurrent: options.maxConcurrent ?? Infinity,
       onError: options.onError ?? (() => {})
     };
-    
+
     // Initialize metrics
     this.metrics = {
       totalItems: 0,
@@ -77,10 +77,10 @@ export class BatchQueue<T> extends EventEmitter {
       averageBatchSize: 0,
       averageProcessingTime: 0
     };
-    
+
     // Use default timers (can be overridden for testing)
     this.timers = defaultTimers;
-    
+
     // Start the flush interval timer
     this.startTimer();
   }
@@ -92,11 +92,11 @@ export class BatchQueue<T> extends EventEmitter {
     if (options.batchSize <= 0) {
       throw new Error('Batch size must be positive');
     }
-    
+
     if (options.flushInterval <= 0) {
       throw new Error('Flush interval must be positive');
     }
-    
+
     if (typeof options.handler !== 'function') {
       throw new Error('Handler must be a function');
     }
@@ -120,10 +120,10 @@ export class BatchQueue<T> extends EventEmitter {
     if (this.stopped) {
       throw new Error('Queue is stopped');
     }
-    
+
     this.queue.push(item);
     this.metrics.totalItems++;
-    
+
     // Check if we should flush based on batch size
     if (this.queue.length >= this.options.batchSize) {
       this.scheduleFlush();
@@ -137,9 +137,9 @@ export class BatchQueue<T> extends EventEmitter {
     if (this.isFlushScheduled || this.stopped) {
       return;
     }
-    
+
     this.isFlushScheduled = true;
-    
+
     // Use Promise.resolve() to schedule flush in next microtask
     Promise.resolve().then(() => {
       this.isFlushScheduled = false;
@@ -164,41 +164,41 @@ export class BatchQueue<T> extends EventEmitter {
     if (this.pendingFlushes >= this.options.maxConcurrent) {
       return;
     }
-    
+
     // Get items to flush
     const batch = this.queue.splice(0, Math.min(this.queue.length, this.options.batchSize));
-    
+
     if (batch.length === 0) {
       return;
     }
-    
+
     this.pendingFlushes++;
     const startTime = Date.now();
-    
+
     try {
       await this.executeBatchWithRetry(batch);
-      
+
       // Update metrics
       this.metrics.totalBatches++;
       const processingTime = Date.now() - startTime;
       this.updateAverageProcessingTime(processingTime);
       this.updateAverageBatchSize(batch.length);
-      
+
     } catch (error) {
       this.metrics.failedBatches++;
-      
+
       // Emit error event
       this.emit('error', {
         error,
         batch,
         attempts: this.options.retryAttempts + 1
       });
-      
+
       // Call onError callback
       this.options.onError(error as Error, batch);
     } finally {
       this.pendingFlushes--;
-      
+
       // If there are more items to flush and we're below the concurrent limit
       if (this.queue.length > 0 && this.pendingFlushes < this.options.maxConcurrent && !this.stopped) {
         this.scheduleFlush();
@@ -211,14 +211,14 @@ export class BatchQueue<T> extends EventEmitter {
    */
   private async executeBatchWithRetry(batch: T[]): Promise<void> {
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt <= this.options.retryAttempts; attempt++) {
       try {
         await this.options.handler(batch);
         return; // Success
       } catch (error) {
         lastError = error as Error;
-        
+
         // If this isn't the last attempt, wait before retrying
         if (attempt < this.options.retryAttempts) {
           const delay = this.options.retryDelay * Math.pow(2, attempt);
@@ -226,7 +226,7 @@ export class BatchQueue<T> extends EventEmitter {
         }
       }
     }
-    
+
     // All attempts failed
     throw lastError;
   }
@@ -246,12 +246,12 @@ export class BatchQueue<T> extends EventEmitter {
   async flush(): Promise<void> {
     // Wait for any scheduled flushes
     await Promise.all(this.flushPromises);
-    
+
     // If queue is empty after pending flush, we're done
     if (this.queue.length === 0) {
       return;
     }
-    
+
     // Flush all remaining items
     await this.flushAll();
   }
@@ -261,11 +261,11 @@ export class BatchQueue<T> extends EventEmitter {
    */
   private async flushAll(): Promise<void> {
     const promises: Promise<void>[] = [];
-    
+
     while (this.queue.length > 0) {
       const flushPromise = this.doFlush();
       promises.push(flushPromise);
-      
+
       // If we're at max concurrent, wait for one to complete
       if (promises.length >= this.options.maxConcurrent) {
         await Promise.race(promises);
@@ -277,7 +277,7 @@ export class BatchQueue<T> extends EventEmitter {
         }
       }
     }
-    
+
     // Wait for all remaining promises
     await Promise.all(promises);
   }
@@ -289,15 +289,15 @@ export class BatchQueue<T> extends EventEmitter {
     if (this.stopped) {
       return;
     }
-    
+
     this.stopped = true;
-    
+
     // Clear the interval timer
     if (this.flushTimer) {
       this.timers.clearInterval(this.flushTimer);
       this.flushTimer = undefined;
     }
-    
+
     // Flush remaining items
     await this.flushAll();
   }

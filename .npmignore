@@ -1,0 +1,58 @@
+# Source files
+src/**/*.ts
+test/
+tests/
+examples/
+docs/
+.dev/
+implementation-plans/
+
+# Development files
+*.log
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+jest.config.js
+tsconfig.json
+.eslintrc.json
+.eslintignore
+
+# Build artifacts
+coverage/
+.nyc_output/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Development scripts
+test-wrapper.sh
+simple-test.js
+run-unit-tests.sh
+build-local.sh
+
+# Project metadata
+CLAUDE.md
+KNOWN-ISSUES.md
+SCRIPTS.md
+STATUS-REPORT.md
+TESTING-README.md
+COMPLETION-STATUS.md
+IMPLEMENTATION-STATUS.md
+
+# IDE
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+
+# Misc
+.DS_Store
+*.swp
+*.swo
+*~
+.env
+.env.local

@@ -26,7 +26,7 @@ export interface Plugin {
   name: string;
   version: string;
   manifest: PluginManifest;
-  
+
   initialize(context: PluginContext): Promise<void>;
   onEvent(event: QueryEvent, context: PluginContext): Promise<void>;
   shutdown(): Promise<void>;

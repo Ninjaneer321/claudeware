@@ -68,22 +68,22 @@ export class ProcessManager extends EventEmitter {
 
   setupSignalForwarding(): void {
     const signals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGHUP'];
-    
+
     signals.forEach(signal => {
       const handler = () => {
         if (this.childProcess && !this.childProcess.killed) {
           this.childProcess.kill(signal);
         }
       };
-      
+
       this.signalHandlers.set(signal, handler);
       process.on(signal, handler);
     });
   }
 
   isRunning(): boolean {
-    return this.childProcess !== undefined && 
-           this.childProcess.killed === false && 
+    return this.childProcess !== undefined &&
+           this.childProcess.killed === false &&
            this.childProcess.exitCode === null;
   }
 

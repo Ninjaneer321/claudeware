@@ -1,0 +1,21 @@
+{
+  "name": "claudeware-sdk-examples",
+  "version": "1.0.0",
+  "description": "Examples showing Claude Code SDK integration with Claudeware",
+  "scripts": {
+    "simple": "tsx simple-wrapper-demo.ts",
+    "advanced": "tsx wrapped-claude-sdk.ts",
+    "analyze": "tsx analyze-queries.ts",
+    "clean": "rm -f *.db query-analysis.json"
+  },
+  "dependencies": {
+    "@instantlyeasy/claude-code-sdk-ts": "^0.3.0-beta.2",
+    "@timmytown/claudeware": "^0.1.2",
+    "better-sqlite3": "^9.6.0",
+    "tsx": "^4.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "typescript": "^5.3.3"
+  }
+}

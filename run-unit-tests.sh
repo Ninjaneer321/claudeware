@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🧪 Running Claude Code Wrapper Unit Tests"
+echo "🧪 Running Claudeware Unit Tests"
 echo "========================================"
 echo
 

@@ -1,6 +1,6 @@
 # Plugin API Documentation
 
-This guide covers everything you need to know to create plugins for the Claude Code Wrapper.
+This guide covers everything you need to know to create plugins for the Claudeware.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This guide covers everything you need to know to create plugins for the Claude C
 
 ## Overview
 
-Plugins are the primary way to extend Claude Code Wrapper functionality. They can:
+Plugins are the primary way to extend Claudeware functionality. They can:
 
 - Process queries and responses
 - Add custom analytics
@@ -99,7 +99,7 @@ The manifest file describes your plugin:
 Every plugin must implement the `Plugin` interface:
 
 ```typescript
-import { Plugin, PluginContext, QueryEvent, PluginManifest } from 'claude-code-wrapper';
+import { Plugin, PluginContext, QueryEvent, PluginManifest } from 'claudeware';
 
 export default class MyPlugin implements Plugin {
   // Required properties
@@ -825,7 +825,7 @@ export default class AnalyticsPlugin implements Plugin {
 ```typescript
 // __tests__/my-plugin.test.ts
 import MyPlugin from '../src/my-plugin';
-import { PluginContext, QueryEvent } from 'claude-code-wrapper';
+import { PluginContext, QueryEvent } from 'claudeware';
 
 describe('MyPlugin', () => {
   let plugin: MyPlugin;
@@ -907,7 +907,7 @@ describe('MyPlugin', () => {
 
 ```typescript
 // __tests__/integration.test.ts
-import { PluginLoader } from 'claude-code-wrapper';
+import { PluginLoader } from 'claudeware';
 import path from 'path';
 
 describe('Plugin Integration', () => {
@@ -955,7 +955,7 @@ my-plugin/
 {
   "name": "claude-code-plugin-myname",
   "version": "1.0.0",
-  "description": "My awesome Claude Code plugin",
+  "description": "My awesome Claudeware plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -966,7 +966,7 @@ my-plugin/
   "keywords": [
     "claude-code",
     "claude-code-plugin",
-    "claude-code-wrapper"
+    "claudeware"
   ],
   "scripts": {
     "build": "tsc",
@@ -974,11 +974,11 @@ my-plugin/
     "prepublish": "npm run build"
   },
   "peerDependencies": {
-    "claude-code-wrapper": "^1.0.0"
+    "claudeware": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
-    "claude-code-wrapper": "^1.0.0",
+    "claudeware": "^1.0.0",
     "jest": "^29.0.0",
     "typescript": "^5.0.0"
   }
@@ -1010,7 +1010,7 @@ my-plugin/
 
 5. **Submit to plugin registry** (coming soon)
    ```bash
-   claude-code-wrapper publish-plugin
+   claudeware publish-plugin
    ```
 
 ### Plugin Discovery
@@ -1138,7 +1138,7 @@ profiler.end();
 
 ## Support
 
-- GitHub Issues: [claude-code-wrapper/issues](https://github.com/your/repo)
+- GitHub Issues: [claudeware/issues](https://github.com/your/repo)
 - Plugin Registry: [claude-plugins.dev](https://claude-plugins.dev) (coming soon)
 - Discord Community: [Join us](https://discord.gg/claude-plugins)
 

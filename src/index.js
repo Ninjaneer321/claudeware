@@ -1,5 +1,5 @@
 /**
- * Claude Code Wrapper
+ * Claudeware
  * 
  * Main package exports for both SDK and programmatic usage.
  */

@@ -1,6 +1,6 @@
-# Claude Code Wrapper Examples
+# Claudeware Examples
 
-This directory contains example plugins demonstrating the Claude Code Wrapper plugin API capabilities.
+This directory contains example plugins demonstrating the Claudeware plugin API capabilities.
 
 ## Example Plugins
 
@@ -102,7 +102,7 @@ cp -r examples/plugins/token-monitor ~/.claude-code/plugins/
 }
 ```
 
-3. Restart Claude Code Wrapper
+3. Restart Claudeware
 
 ## Creating Your Own Plugin
 

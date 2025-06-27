@@ -1,7 +1,7 @@
 # JSON Parser Implementation Plan
 
 ## Component Overview
-A robust streaming JSON parser that handles partial chunks, malformed data, and provides recovery strategies for the Claude Code wrapper.
+A robust streaming JSON parser that handles partial chunks, malformed data, and provides recovery strategies for the Claudeware.
 
 ## Key Requirements
 - Handle partial JSON chunks across stream boundaries

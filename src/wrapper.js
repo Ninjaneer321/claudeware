@@ -1,5 +1,5 @@
 /**
- * Claude Code Wrapper
+ * Claudeware
  * 
  * Main orchestrator class that coordinates all components to provide
  * zero-latency stream passthrough with plugin-based data collection.
@@ -233,7 +233,7 @@ class ClaudeWrapper {
 
     // Create logger
     this.logger = this.createLogger();
-    this.logger.info('Initializing Claude Code Wrapper', {
+    this.logger.info('Initializing Claudeware', {
       mode: this.config.mode,
       claudePath: this.config.claudePath
     });
@@ -396,7 +396,7 @@ class ClaudeWrapper {
     await this.initialize();
 
     const startTime = Date.now();
-    this.logger.info('Starting Claude Code wrapper', { args });
+    this.logger.info('Starting Claudeware', { args });
 
     try {
       // Spawn Claude process

@@ -1,6 +1,6 @@
-# Claude Code Wrapper Documentation
+# Claudeware Documentation
 
-Welcome to the Claude Code Wrapper documentation! This directory contains comprehensive guides and references for using and extending the wrapper.
+Welcome to the Claudeware documentation! This directory contains comprehensive guides and references for using and extending the wrapper.
 
 ## 📚 Documentation Index
 
@@ -77,17 +77,17 @@ Code examples are provided in multiple languages:
 
 **TypeScript** (primary):
 ```typescript
-import { createWrappedSDK } from 'claude-code-wrapper';
+import { createWrappedSDK } from 'claudeware';
 ```
 
 **JavaScript**:
 ```javascript
-const { createWrappedSDK } = require('claude-code-wrapper');
+const { createWrappedSDK } = require('claudeware');
 ```
 
 **Shell**:
 ```bash
-claude-code-wrapper --version
+claudeware --version
 ```
 
 ## 🔍 Search Documentation
@@ -95,7 +95,7 @@ claude-code-wrapper --version
 Looking for something specific? Use GitHub's search feature:
 
 ```
-repo:instantlyeasy/claude-code-wrapper path:docs your-search-term
+repo:instantlyeasy/claudeware path:docs your-search-term
 ```
 
 Or use grep locally:
@@ -113,8 +113,8 @@ grep -r "your search term" docs/
 
 ### Community
 - [Discord Server](https://discord.gg/claude-wrapper)
-- [GitHub Discussions](https://github.com/instantlyeasy/claude-code-wrapper/discussions)
-- [Stack Overflow Tag](https://stackoverflow.com/questions/tagged/claude-code-wrapper)
+- [GitHub Discussions](https://github.com/instantlyeasy/claudeware/discussions)
+- [Stack Overflow Tag](https://stackoverflow.com/questions/tagged/claudeware)
 
 ### Tools and Utilities
 - [Plugin Template](https://github.com/instantlyeasy/claude-plugin-template)
@@ -126,9 +126,9 @@ grep -r "your search term" docs/
 If you can't find what you're looking for:
 
 1. **Check the FAQ**: [Frequently Asked Questions](./FAQ.md)
-2. **Search Issues**: [GitHub Issues](https://github.com/instantlyeasy/claude-code-wrapper/issues)
+2. **Search Issues**: [GitHub Issues](https://github.com/instantlyeasy/claudeware/issues)
 3. **Ask on Discord**: [Join our community](https://discord.gg/claude-wrapper)
-4. **Open an Issue**: [Create a new issue](https://github.com/instantlyeasy/claude-code-wrapper/issues/new)
+4. **Open an Issue**: [Create a new issue](https://github.com/instantlyeasy/claudeware/issues/new)
 
 ## 📝 Documentation Feedback
 
@@ -142,4 +142,4 @@ See [Contributing to Documentation](../CONTRIBUTING.md#documentation) for guidel
 
 ---
 
-Happy coding with Claude Code Wrapper! 🚀
+Happy coding with Claudeware! 🚀

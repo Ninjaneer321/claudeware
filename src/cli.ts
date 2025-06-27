@@ -1,21 +1,24 @@
 #!/usr/bin/env node
 
 /**
- * Claude Code Wrapper CLI
- * 
+ * Claudeware CLI
+ *
  * Main entry point for the wrapper command-line interface.
  * Intercepts Claude Code execution with zero-latency passthrough.
  */
 
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-console */
 const { ClaudeWrapper } = require('./wrapper');
-const path = require('path');
-const fs = require('fs');
+import * as path from 'path';
+import * as fs from 'fs';
+import { WrapperConfig } from './types/config';
 
-async function main() {
+async function main(): Promise<void> {
   try {
     // Parse command line arguments
     const args = process.argv.slice(2);
-    
+
     // Check for help
     if (args.includes('--help') || args.includes('-h')) {
       showHelp();
@@ -54,18 +57,18 @@ async function main() {
     );
 
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('Error:', (error as Error).message);
     if (process.env.CLAUDE_WRAPPER_LOG_LEVEL === 'debug') {
-      console.error(error.stack);
+      console.error((error as Error).stack);
     }
     process.exit(1);
   }
 }
 
-function loadConfig(args) {
+function loadConfig(args: string[]): WrapperConfig {
   // Default configuration
-  const config = {
-    mode: process.env.NODE_ENV || 'production',
+  const config: WrapperConfig = {
+    mode: (process.env.NODE_ENV || 'production') as 'development' | 'production',
     claudePath: process.env.CLAUDE_PATH || 'claude',
     wrapper: {
       timeout: 300000, // 5 minutes
@@ -75,11 +78,12 @@ function loadConfig(args) {
     plugins: {
       directory: process.env.CLAUDE_WRAPPER_PLUGINS_DIR || expandPath('~/.claude-code/plugins'),
       timeout: 5000,
+      retryAttempts: 3,
       enabledPlugins: [],
       disabledPlugins: []
     },
     database: {
-      type: 'sqlite',
+      type: 'sqlite' as const,
       path: process.env.CLAUDE_WRAPPER_DB_PATH || expandPath('~/.claude-code/queries.db'),
       batchSize: 100,
       flushInterval: 1000,
@@ -87,18 +91,22 @@ function loadConfig(args) {
     },
     monitoring: {
       enabled: true,
-      logLevel: process.env.CLAUDE_WRAPPER_LOG_LEVEL || 'info',
+      logLevel: (process.env.CLAUDE_WRAPPER_LOG_LEVEL || 'info') as 'debug' | 'info' | 'warn' | 'error',
       logPath: expandPath('~/.claude-code/logs/wrapper.log')
+    },
+    categorization: {
+      cacheSize: 1000,
+      patterns: []
     }
   };
 
   // Parse command line overrides
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
-    
+
     switch (arg) {
       case '--mode':
-        config.mode = args[++i];
+        config.mode = args[++i] as 'development' | 'production';
         break;
       case '--claude-path':
         config.claudePath = args[++i];
@@ -116,7 +124,7 @@ function loadConfig(args) {
         config.plugins.disabledPlugins = args[++i].split(',');
         break;
       case '--log-level':
-        config.monitoring.logLevel = args[++i];
+        config.monitoring.logLevel = args[++i] as 'debug' | 'info' | 'warn' | 'error';
         break;
     }
   }
@@ -128,13 +136,13 @@ function loadConfig(args) {
       const fileConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
       mergeConfig(config, fileConfig);
     } catch (error) {
-      console.warn('Warning: Failed to load config file:', error.message);
+      console.warn('Warning: Failed to load config file:', (error as Error).message);
     }
   }
 
   // Test mode overrides
   if (process.env.CLAUDE_WRAPPER_TEST_MODE) {
-    config.mode = 'test';
+    config.mode = 'development';
     config.database.path = ':memory:';
     config.monitoring.logLevel = 'debug';
   }
@@ -142,7 +150,7 @@ function loadConfig(args) {
   return config;
 }
 
-function mergeConfig(target, source) {
+function mergeConfig(target: Record<string, any>, source: Record<string, any>): void {
   for (const key in source) {
     if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
       target[key] = target[key] || {};
@@ -153,19 +161,19 @@ function mergeConfig(target, source) {
   }
 }
 
-function expandPath(filePath) {
+function expandPath(filePath: string): string {
   if (filePath.startsWith('~')) {
-    const home = process.env.HOME || process.env.USERPROFILE;
+    const home = process.env.HOME || process.env.USERPROFILE || '';
     return path.join(home, filePath.slice(1));
   }
   return path.resolve(filePath);
 }
 
-function showHelp() {
+function showHelp(): void {
   console.log(`
-Claude Code Wrapper - Query collection and analysis for Claude Code
+Claudeware - Query collection and analysis for Claude Code
 
-Usage: claude-code-wrapper [options] [claude-args...]
+Usage: claudeware [options] [claude-args...]
 
 Options:
   --help, -h              Show this help message
@@ -187,25 +195,25 @@ Environment Variables:
 
 Examples:
   # Basic usage
-  claude-code-wrapper "What is 2+2?"
+  claudeware "What is 2+2?"
   
   # Enable specific plugins
-  claude-code-wrapper --enable-plugins query-collector,cache "Explain recursion"
+  claudeware --enable-plugins query-collector,cache "Explain recursion"
   
   # Custom database location
-  claude-code-wrapper --db-path ./my-queries.db "Create a Python function"
+  claudeware --db-path ./my-queries.db "Create a Python function"
   
   # Debug mode
-  CLAUDE_WRAPPER_LOG_LEVEL=debug claude-code-wrapper "Debug this code"
+  CLAUDE_WRAPPER_LOG_LEVEL=debug claudeware "Debug this code"
 
-Documentation: https://github.com/yourusername/claude-code-wrapper
+Documentation: https://github.com/yourusername/claudeware
 `);
 }
 
-function showVersion() {
+function showVersion(): void {
   const packagePath = path.join(__dirname, '../package.json');
-  const package = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-  console.log(`claude-code-wrapper v${package.version}`);
+  const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+  console.log(`claudeware v${packageJson.version}`);
 }
 
 // Run the CLI
@@ -213,4 +221,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { main };
+export { main };

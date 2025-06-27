@@ -1,9 +1,9 @@
 import { Plugin, PluginManifest, PluginContext } from '../../types';
-import { 
-  QueryEvent, 
-  QueryRecord, 
-  ResponseRecord, 
-  OptimizationSuggestion 
+import {
+  QueryEvent,
+  QueryRecord,
+  ResponseRecord,
+  OptimizationSuggestion
 } from '../../types/events';
 import { LRUCache } from 'lru-cache';
 
@@ -43,7 +43,7 @@ export class QueryCollectorPlugin implements Plugin {
       max: 1000,
       ttl: 1000 * 60 * 60 // 1 hour TTL
     });
-    
+
     this.patterns = new Map([
       ['code', ['create', 'write', 'implement', 'build', 'function', 'class', 'code', 'program', 'develop']],
       ['debug', ['error', 'fix', 'bug', 'issue', 'problem', 'debug', 'troubleshoot', 'resolve']],
@@ -57,7 +57,7 @@ export class QueryCollectorPlugin implements Plugin {
 
   async initialize(context: PluginContext): Promise<void> {
     context.logger.info({ plugin: this.name }, 'Initializing query collector plugin');
-    
+
     // Load custom categorization patterns if provided
     if (context.config.categorizationPatterns) {
       this.customPatterns = context.config.categorizationPatterns;
@@ -102,7 +102,7 @@ export class QueryCollectorPlugin implements Plugin {
 
   private async handleQueryEvent(event: QueryEvent, context: PluginContext): Promise<void> {
     const { data, metadata } = event;
-    
+
     if (!data || !data.messages && !data.content) {
       context.logger.error({ eventId: event.id }, 'Missing query data');
       return;
@@ -224,7 +224,7 @@ export class QueryCollectorPlugin implements Plugin {
             queryInfo,
             { model: queryInfo.model, inputTokens, outputTokens }
           );
-          
+
           if (optimization) {
             await context.dataStore.saveOptimization({
               queryId,
@@ -249,7 +249,7 @@ export class QueryCollectorPlugin implements Plugin {
 
   private categorizeQuery(query: string): CategoryResult {
     const normalizedQuery = query.toLowerCase().trim();
-    
+
     // Check cache first
     const cached = this.cache.get(normalizedQuery);
     if (cached) {
@@ -257,7 +257,7 @@ export class QueryCollectorPlugin implements Plugin {
     }
 
     let category = 'general';
-    let matchedPatterns: { category: string; priority: number; matchPosition: number }[] = [];
+    const matchedPatterns: { category: string; priority: number; matchPosition: number }[] = [];
 
     // Check custom patterns first if available
     if (this.customPatterns) {
@@ -266,8 +266,8 @@ export class QueryCollectorPlugin implements Plugin {
           const keywordLower = keyword.toLowerCase();
           const position = normalizedQuery.indexOf(keywordLower);
           if (position !== -1) {
-            matchedPatterns.push({ 
-              category: pattern.category, 
+            matchedPatterns.push({
+              category: pattern.category,
               priority: pattern.priority,
               matchPosition: position
             });
@@ -291,7 +291,7 @@ export class QueryCollectorPlugin implements Plugin {
           } else if (cat === 'debug' || cat === 'explanation') {
             priority = 90;
           }
-          
+
           matchedPatterns.push({ category: cat, priority, matchPosition: position });
           break;
         }
@@ -312,10 +312,10 @@ export class QueryCollectorPlugin implements Plugin {
 
     const complexity = this.calculateComplexity(query);
     const result = { category, complexity };
-    
+
     // Cache the result
     this.cache.set(normalizedQuery, result);
-    
+
     return result;
   }
 
@@ -326,22 +326,22 @@ export class QueryCollectorPlugin implements Plugin {
     const hasComplexProgramming = /algorithm|async.*await|explain how.*works/i.test(query);
     const hasKnownAlgorithms = /fibonacci|factorial|prime|recursion|sorting algorithm|binary search/i.test(query);
     const isSimpleRequest = /^(write|create|make)\s+(a\s+)?(simple\s+)?function/i.test(query);
-    
+
     // High complexity
     if (wordCount > 15 || hasComplexRequirements || hasMultipleClauses) {
       return 'high';
     }
-    
+
     // Medium complexity - complex programming concepts, algorithms, or longer explanations
     if (hasComplexProgramming || hasKnownAlgorithms || (query.includes('explain how') && wordCount > 5)) {
       return 'medium';
     }
-    
+
     // Simple function requests remain low complexity
     if (isSimpleRequest || wordCount < 10) {
       return 'low';
     }
-    
+
     return 'medium';
   }
 

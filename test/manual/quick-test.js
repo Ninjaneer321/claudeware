@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Quick test script for Claude Code Wrapper
+ * Quick test script for Claudeware
  * 
  * This tests the core functionality without requiring Claude Code to be installed.
  * It uses echo as a mock Claude command to verify the wrapper mechanics.
@@ -11,7 +11,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 async function quickTest() {
-  console.log('🧪 Claude Code Wrapper Quick Test\n');
+  console.log('🧪 Claudeware Quick Test\n');
   console.log('This test verifies the wrapper mechanics using mock commands.\n');
 
   // Test 1: Basic passthrough
@@ -58,7 +58,7 @@ async function quickTest() {
   console.log('\n✅ All tests passed!\n');
   console.log('Next steps:');
   console.log('1. Install the wrapper: npm link');
-  console.log('2. Test with real Claude: claude-code-wrapper "What is 2+2?"');
+  console.log('2. Test with real Claude: claudeware "What is 2+2?"');
   console.log('3. Check the database: sqlite3 ~/.claude-code/queries.db');
 }
 

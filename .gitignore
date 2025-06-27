@@ -26,3 +26,5 @@ lerna-debug.log*
 # IDE-specific
 .vscode/
 .idea/
+.claude
+.dev

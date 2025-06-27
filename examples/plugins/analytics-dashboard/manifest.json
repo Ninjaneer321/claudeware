@@ -2,7 +2,7 @@
   "name": "analytics-dashboard",
   "version": "1.0.0",
   "description": "Real-time analytics dashboard for Claude usage patterns",
-  "author": "Claude Code Wrapper Team",
+  "author": "Claudeware Team",
   "license": "MIT",
   "main": "./index.js",
   "dependencies": [],

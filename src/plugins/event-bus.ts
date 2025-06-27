@@ -15,7 +15,7 @@ interface ListenerOptions {
   priority?: number;
 }
 
-interface EventMetrics {
+export interface EventMetrics {
   totalEvents: number;
   eventCounts: Record<string, number>;
   listenerCounts: Record<string, number>;
@@ -140,7 +140,7 @@ export class EventBus extends EventEmitter {
         }
       }
     }
-    
+
     return this;
   }
 
@@ -167,7 +167,7 @@ export class EventBus extends EventEmitter {
 
     // Update metrics
     this.updateListenerCounts();
-    
+
     return this;
   }
 
@@ -200,7 +200,7 @@ export class EventBus extends EventEmitter {
 
     // Update metrics
     this.updateListenerCounts();
-    
+
     return this;
   }
 
@@ -219,7 +219,7 @@ export class EventBus extends EventEmitter {
 
     // Update metrics
     this.updateListenerCounts();
-    
+
     return this;
   }
 
@@ -334,12 +334,12 @@ export class EventBus extends EventEmitter {
    */
   private updateListenerCounts(): void {
     this.metrics.listenerCounts = {};
-    
+
     // Count type-specific listeners
     for (const [type, listeners] of this.eventListeners) {
       this.metrics.listenerCounts[type] = listeners.size;
     }
-    
+
     // Count wildcard listeners
     if (this.wildcardListeners.size > 0) {
       this.metrics.listenerCounts['*'] = this.wildcardListeners.size;

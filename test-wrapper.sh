@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Simple test script for Claude Code Wrapper
+# Simple test script for Claudeware
 
-echo "🧪 Testing Claude Code Wrapper"
+echo "🧪 Testing Claudeware"
 echo "=============================="
 echo
 
@@ -30,4 +30,4 @@ echo "✅ Basic tests completed!"
 echo
 echo "To test with real Claude Code:"
 echo "  1. npm link"
-echo "  2. claude-code-wrapper 'What is 2+2?'"
+echo "  2. claudeware 'What is 2+2?'"
