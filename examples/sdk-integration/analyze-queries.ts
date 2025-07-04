@@ -5,7 +5,7 @@
  * to find optimization opportunities and usage patterns.
  */
 
-import { createWrappedSDK } from '@timmytown/claudeware';
+import { createWrappedSDK } from '@instantlyeasy/claudeware';
 import Database from 'better-sqlite3';
 import * as path from 'path';
 

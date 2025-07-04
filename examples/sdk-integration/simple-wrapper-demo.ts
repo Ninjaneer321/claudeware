@@ -8,7 +8,7 @@
  * - Plugin-based analysis
  */
 
-import { createWrappedSDK } from '@timmytown/claudeware';
+import { createWrappedSDK } from '@instantlyeasy/claudeware';
 
 async function main() {
   // Create wrapped SDK instance
@@ -37,8 +37,8 @@ async function main() {
   
   let codeText = '';
   for await (const msg of wrappedClaude.query(
-    'Write a Python function to calculate factorial',
-    { model: 'claude-3-sonnet-20240229' }
+    'Write a Python function to calculate factorial'
+    // Available models: 'opus', 'sonnet' (default uses CLI settings)
   )) {
     if (msg.type === 'assistant' && msg.content) {
       const text = msg.content
@@ -72,7 +72,8 @@ async function main() {
   const metrics = await wrappedClaude.getMetrics();
   
   console.log(`- Events Processed: ${metrics.eventBus.totalEvents}`);
-  console.log(`- Events in Queue: ${metrics.batchQueue.pending}`);
+  console.log(`- Total Batches: ${metrics.batchQueue.totalBatches}`);
+  console.log(`- Average Batch Size: ${metrics.batchQueue.averageBatchSize}`);
   
   // Plugin insights
   if (metrics.plugins?.length > 0) {
@@ -101,11 +102,7 @@ console.log(`
    ✓ Works with all Claude Code SDK features
 `);
 
-// Check if ANTHROPIC_API_KEY is set
-if (!process.env.ANTHROPIC_API_KEY) {
-  console.error('\n⚠️  Please set ANTHROPIC_API_KEY environment variable to run this demo');
-  console.error('   Example: export ANTHROPIC_API_KEY="your-api-key"');
-  process.exit(1);
-}
+// Note: Authentication is handled by Claude Code CLI
+// Make sure you're logged in via: claude-code login
 
 main().catch(console.error);

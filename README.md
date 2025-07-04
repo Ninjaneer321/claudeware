@@ -1,8 +1,11 @@
 # Claudeware
 
-A powerful middleware system for Claude Code that enables query collection, analysis, and optimization through a plugin-based architecture - all with **zero latency impact** on CLI output.
+Zero-latency middleware for Claude Code that enables query collection, analysis, and optimization through a plugin-based architecture.
 
-## 🚀 Features
+[![npm version](https://badge.fury.io/js/@instantlyeasy%2Fclaudeware.svg)](https://www.npmjs.com/package/@instantlyeasy/claudeware)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Features
 
 - **Zero-Latency Passthrough**: CLI output is never delayed by processing
 - **Plugin System**: Extensible middleware architecture
@@ -12,17 +15,6 @@ A powerful middleware system for Claude Code that enables query collection, anal
 - **Error Isolation**: Plugin failures don't affect Claude Code operation
 - **Hot Reloading**: Add/remove plugins without restart (coming soon)
 
-## 📋 Table of Contents
-
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Architecture](#architecture)
-- [Configuration](#configuration)
-- [Plugin System](#plugin-system)
-- [SDK Integration](#sdk-integration)
-- [Query Analytics](#query-analytics)
-- [Development](#development)
-- [API Reference](#api-reference)
 
 ## Installation
 
@@ -35,7 +27,7 @@ A powerful middleware system for Claude Code that enables query collection, anal
 ### Install from npm
 
 ```bash
-npm install -g @timmytown/claudeware
+npm install -g @instantlyeasy/claudeware
 ```
 
 ### Install from source
@@ -52,19 +44,22 @@ npm link
 
 ### CLI Usage
 
-Once installed, the wrapper transparently intercepts Claude Code:
+Simply prefix your Claude Code commands with `claudeware`:
 
 ```bash
-# Use Claude Code as normal - wrapper runs automatically
-claude-code "Create a React component for a todo list"
+# Instead of:
+claude-code "What is 2 + 2?"
 
-# Output appears instantly, queries collected in background
+# Use:
+claudeware "What is 2 + 2?"
 ```
+
+All Claude Code functionality remains unchanged, but your queries are now being collected and analyzed in the background.
 
 ### SDK Usage
 
 ```typescript
-import { createWrappedSDK } from '@timmytown/claudeware';
+import { createWrappedSDK } from '@instantlyeasy/claudeware';
 
 // Create wrapped SDK instance  
 const wrappedClaude = createWrappedSDK({
@@ -83,7 +78,7 @@ const metrics = await wrappedClaude.getMetrics();
 console.log('Tokens used:', metrics.sessionMetrics.totalTokens);
 ```
 
-📚 **See the [SDK integration examples](examples/sdk-integration/) for comprehensive usage patterns with the Claude Code SDK TypeScript library.**
+See the [SDK integration examples](examples/sdk-integration/) for comprehensive usage patterns.
 
 ## Architecture
 
@@ -167,7 +162,7 @@ Create `~/.claude-code/wrapper.config.json`:
 
 ## Plugin System
 
-The wrapper includes a powerful plugin system for extending functionality.
+The claudeware wrapper includes a powerful plugin system for extending functionality.
 
 ### Built-in Plugins
 
@@ -447,8 +442,9 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## Acknowledgments
 
-Built with ❤️ using:
-- [Claude Code SDK](https://github.com/anthropics/claude-code-sdk-ts)
+Built with:
+- [Claude Code CLI](https://github.com/anthropics/claude-code)
+- [Claude Code SDK](https://github.com/instantlyeasy/claude-code-sdk-ts)
 - [Better SQLite3](https://github.com/WiseLibs/better-sqlite3)
 - [Pino](https://github.com/pinojs/pino)
 - [TypeScript](https://www.typescriptlang.org/)
@@ -456,6 +452,7 @@ Built with ❤️ using:
 ---
 
 For more information:
-- [Plugin API Documentation](./docs/PLUGIN-API.md)
-- [Architecture Deep Dive](./docs/ARCHITECTURE.md)
-- [Performance Benchmarks](./docs/BENCHMARKS.md)
+- [Plugin API Documentation](docs/PLUGIN-API.md)
+- [Architecture Deep Dive](docs/ARCHITECTURE.md)
+- [Quick Start Guide](docs/QUICK-START.md)
+- [Testing Guide](docs/TESTING.md)

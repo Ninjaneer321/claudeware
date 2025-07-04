@@ -1,58 +1,58 @@
-# Source files
-src/**/*.ts
-test/
-tests/
-examples/
-docs/
+# Development files
 .dev/
+.claude/
 implementation-plans/
 
-# Development files
-*.log
-*.test.js
-*.test.ts
-*.spec.js
-*.spec.ts
-jest.config.js
-tsconfig.json
-.eslintrc.json
-.eslintignore
-
-# Build artifacts
+# Test files
+test/
 coverage/
-.nyc_output/
+.coverage/
+jest.config.js
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
 
-# CI/CD
+# Examples (large, not needed in package)
+examples/
+
+# Build and config files
 .github/
-.gitlab-ci.yml
-.travis.yml
-
-# Development scripts
-test-wrapper.sh
-simple-test.js
-run-unit-tests.sh
-build-local.sh
-
-# Project metadata
-CLAUDE.md
-KNOWN-ISSUES.md
-SCRIPTS.md
-STATUS-REPORT.md
-TESTING-README.md
-COMPLETION-STATUS.md
-IMPLEMENTATION-STATUS.md
-
-# IDE
 .vscode/
 .idea/
+.eslintrc.json
+.prettierrc
+tsconfig.json
+tsconfig.build.json
 
-# Dependencies
-node_modules/
+# Scripts
+scripts/
+simple-test.js
+test-wrapper.sh
 
-# Misc
+# Development databases
+*.db
+*.db-journal
+*.db-wal
+
+# Logs
+logs/
+*.log
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Editor files
 *.swp
 *.swo
 *~
-.env
-.env.local
+
+# Source files (we ship compiled JS)
+src/**/*.ts
+\!src/**/*.d.ts
+
+# Keep only necessary docs
+docs/BENCHMARKS.md
+docs/CONTRIBUTING.md
+EOF < /dev/null

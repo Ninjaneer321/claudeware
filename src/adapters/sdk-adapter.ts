@@ -1,7 +1,7 @@
-import { query as sdkQuery, ClaudeCodeOptions, Message } from '@instantlyeasy/claude-code-sdk-ts';
+import { query as sdkQuery, ClaudeCodeOptions, Message, TextBlock } from '@instantlyeasy/claude-code-sdk-ts';
 import { EventBus, EventMetrics } from '../plugins/event-bus';
 import { PluginLoader, PluginMetrics } from '../plugins/plugin-loader';
-import { PluginContext, QueryEvent, DataStore } from '../types';
+import { PluginContext, QueryEvent, DataStore, QueryRecord, ResponseRecord } from '../types';
 import { SqliteAdapter } from '../database/sqlite-adapter';
 import { BatchQueue, BatchMetrics } from '../database/batch-queue';
 import pino from 'pino';
@@ -15,7 +15,7 @@ export class SDKWrapperAdapter {
   private eventBus: EventBus;
   private pluginLoader!: PluginLoader;
   private dataStore!: DataStore;
-  private batchQueue!: BatchQueue<any>;
+  private batchQueue!: BatchQueue<QueryRecord | ResponseRecord>;
   private logger: pino.Logger;
   private sessionId: string;
   private initialized: boolean = false;
@@ -113,7 +113,7 @@ export class SDKWrapperAdapter {
         timestamp: startTime,
         data: {
           messages: [{ role: 'user', content: prompt }],
-          model: options?.model || 'claude-3-opus',
+          model: options?.model || 'opus',
           options
         },
         metadata: {
@@ -128,21 +128,21 @@ export class SDKWrapperAdapter {
 
       // Execute original SDK query
       let responseText = '';
-      let tokenUsage: any = {};
+      let tokenUsage: { input_tokens?: number; output_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number; } | undefined;
 
       for await (const message of sdkQuery(prompt, options)) {
         // Collect response content
         if (message.type === 'assistant') {
           const textContent = message.content
             .filter(block => block.type === 'text')
-            .map(block => (block as any).text)
+            .map(block => (block as TextBlock).text)
             .join('\n');
           responseText += textContent;
         }
 
         // Collect usage stats
-        if (message.type === 'result' && (message as any).usage) {
-          tokenUsage = (message as any).usage;
+        if (message.type === 'result' && message.usage) {
+          tokenUsage = message.usage;
         }
 
         // Emit response event
@@ -176,7 +176,7 @@ export class SDKWrapperAdapter {
         timestamp: Date.now(),
         data: {
           id: uuidv4(),
-          model: options?.model || 'claude-3-opus',
+          model: options?.model || 'opus',
           usage: tokenUsage,
           content: [{ type: 'text', text: responseText }],
           stop_reason: 'end_turn',

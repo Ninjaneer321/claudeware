@@ -6,11 +6,12 @@
     "simple": "tsx simple-wrapper-demo.ts",
     "advanced": "tsx wrapped-claude-sdk.ts",
     "analyze": "tsx analyze-queries.ts",
-    "clean": "rm -f *.db query-analysis.json"
+    "scaffold": "tsx express-scaffolding-demo.ts",
+    "clean": "rm -f *.db query-analysis.json express-scaffolding-analytics.json && rm -rf my-express-api"
   },
   "dependencies": {
-    "@instantlyeasy/claude-code-sdk-ts": "^0.3.0-beta.2",
-    "@timmytown/claudeware": "^0.1.2",
+    "@instantlyeasy/claude-code-sdk-ts": "^0.4.0-beta.1",
+    "@instantlyeasy/claudeware": "^0.1.0-beta.1",
     "better-sqlite3": "^9.6.0",
     "tsx": "^4.7.0"
   },

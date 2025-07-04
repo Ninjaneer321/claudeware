@@ -6,7 +6,7 @@
  */
 
 import { claude } from '@instantlyeasy/claude-code-sdk-ts';
-import { createWrappedSDK, PluginMetrics } from '@timmytown/claudeware';
+import { createWrappedSDK, PluginMetrics } from '@instantlyeasy/claudeware';
 import * as path from 'path';
 import * as fs from 'fs';
 

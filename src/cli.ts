@@ -150,13 +150,20 @@ function loadConfig(args: string[]): WrapperConfig {
   return config;
 }
 
-function mergeConfig(target: Record<string, any>, source: Record<string, any>): void {
-  for (const key in source) {
-    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-      target[key] = target[key] || {};
-      mergeConfig(target[key], source[key]);
+function mergeConfig(target: unknown, source: unknown): void {
+  if (typeof target !== 'object' || typeof source !== 'object' || target === null || source === null) {
+    return;
+  }
+
+  const targetObj = target as Record<string, unknown>;
+  const sourceObj = source as Record<string, unknown>;
+
+  for (const key in sourceObj) {
+    if (sourceObj[key] && typeof sourceObj[key] === 'object' && !Array.isArray(sourceObj[key])) {
+      targetObj[key] = targetObj[key] || {};
+      mergeConfig(targetObj[key], sourceObj[key]);
     } else {
-      target[key] = source[key];
+      targetObj[key] = sourceObj[key];
     }
   }
 }
@@ -206,7 +213,7 @@ Examples:
   # Debug mode
   CLAUDE_WRAPPER_LOG_LEVEL=debug claudeware "Debug this code"
 
-Documentation: https://github.com/yourusername/claudeware
+Documentation: https://github.com/instantlyeasy/claudeware
 `);
 }
 

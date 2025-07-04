@@ -1,21 +1,59 @@
-# Claudeware SDK Integration Examples
+# Claude Code SDK + Claudeware Integration Examples
 
-This directory contains examples showing how to use Claudeware with the Claude Code SDK TypeScript library.
+This directory contains examples demonstrating how to integrate the Claude Code SDK with Claudeware for enhanced analytics and project automation.
 
 ## Prerequisites
 
-```bash
-npm install @instantlyeasy/claude-code-sdk-ts @timmytown/claudeware
-```
+1. Make sure you're logged into Claude Code CLI:
+   ```bash
+   claude-code login
+   ```
+
+2. Install the required packages:
+   ```bash
+   npm install @instantlyeasy/claude-code-sdk-ts @instantlyeasy/claudeware
+   ```
+
+**Note**: Authentication is handled by the Claude Code CLI. You don't need to set any API keys - just make sure you're logged in to Claude Code.
 
 ## Examples
 
-### 1. Simple Wrapper Demo (`simple-wrapper-demo.ts`)
+### 1. 🏗️ Express Service Scaffolding Demo (`express-scaffolding-demo.ts`) ⭐
+
+**The crown jewel example** - A comprehensive project scaffolding system that demonstrates the power of combining the Claude Code SDK's advanced features with Claudeware's analytics capabilities.
+
+```bash
+npm run scaffold
+```
+
+**Features:**
+- 🏗️ **Complete Express.js service generation** with TypeScript
+- 🔐 **Authentication system** (JWT-based)
+- 🗄️ **Database integration** (SQLite/PostgreSQL/MySQL)
+- 🧪 **Testing suite** (Jest + Supertest)
+- 🐳 **Docker configuration** (multi-stage builds)
+- 📚 **Comprehensive documentation** (README, API docs, deployment guides)
+- 📊 **Claudeware analytics** (tracks tokens, timing, files created)
+
+**SDK Features Demonstrated:**
+- **Role-based prompting** (`withRole('senior-fullstack-developer')`)
+- **Tool permissions** (`allowTools('Write', 'MultiEdit')`)
+- **Response handlers** (`onToolUse()`, `onMessage()`)
+- **Timeout management** (`withTimeout(45000)`)
+- **Structured parsing** (`waitForCompletion()`)
+
+**Claudeware Features Demonstrated:**
+- **Analytics tracking** (tokens, timing, files created)
+- **Database integration** (SQLite analytics storage)
+- **Plugin system** (query-collector plugin)
+- **Performance monitoring** (scaffolding time, tokens per file)
+
+### 2. Simple Wrapper Demo (`simple-wrapper-demo.ts`)
 
 The easiest way to get started. Shows basic usage and automatic query collection.
 
 ```bash
-npx tsx simple-wrapper-demo.ts
+npm run simple
 ```
 
 **Features demonstrated:**
@@ -24,12 +62,12 @@ npx tsx simple-wrapper-demo.ts
 - Performance monitoring
 - Zero configuration setup
 
-### 2. Comprehensive Examples (`wrapped-claude-sdk.ts`)
+### 3. Advanced SDK Integration (`wrapped-claude-sdk.ts`)
 
-Advanced examples showing all features of the wrapped SDK.
+Advanced patterns for SDK integration with custom analytics.
 
 ```bash
-npx tsx wrapped-claude-sdk.ts
+npm run advanced
 ```
 
 **Features demonstrated:**
@@ -40,12 +78,12 @@ npx tsx wrapped-claude-sdk.ts
 - Metrics export
 - Plugin integration
 
-### 3. Query Analysis (`analyze-queries.ts`)
+### 4. Query Analysis (`analyze-queries.ts`)
 
 Shows how to analyze collected queries for insights and optimization.
 
 ```bash
-npx tsx analyze-queries.ts
+npm run analyze
 ```
 
 **Analysis includes:**
@@ -55,6 +93,77 @@ npx tsx analyze-queries.ts
 - Optimization opportunities
 - Duplicate detection
 - Usage patterns
+
+## Key Integration Patterns
+
+### 1. Direct SDK Wrapping (No Interceptors Needed)
+
+```typescript
+class ClaudewareSDK {
+  async scaffoldProject(config: ProjectConfig) {
+    // Start Claudeware analytics
+    const analytics = this.startTracking();
+    
+    // Use SDK with all its features
+    const result = await claude()
+      .withRole('senior-developer')          // SDK role system
+      .allowTools('Write', 'MultiEdit')      // SDK permissions
+      .onToolUse(tool => analytics.track(tool))  // Claudeware analytics
+      .onMessage(msg => analytics.track(msg))    // Response tracking
+      .query(prompt)
+      .asText();
+    
+    // Complete analytics
+    analytics.complete(result);
+    return result;
+  }
+}
+```
+
+### 2. Response Processing for Analytics
+
+```typescript
+const result = await claude()
+  .withRole('architect')
+  .onMessage(msg => {
+    // Real-time analytics without interceptors
+    claudeware.trackMessage(msg);
+    
+    if (msg.type === 'assistant') {
+      // Track token usage
+      const tokens = msg.content.reduce((count, block) => 
+        count + (block.type === 'text' ? block.text.split(' ').length : 0), 0
+      );
+      claudeware.trackTokens(tokens);
+    }
+  })
+  .onToolUse(tool => {
+    // Track tool usage
+    claudeware.trackTool(tool.name, tool.input);
+  })
+  .query(prompt);
+```
+
+### 3. Configuration Bridge
+
+```typescript
+// Map Claudeware config to SDK options
+const sdkOptions = claudeware.config.toSDKOptions();
+
+const result = await claude()
+  .withModel(sdkOptions.model)
+  .allowTools(...sdkOptions.allowedTools)
+  .withTimeout(sdkOptions.timeout)
+  .query(prompt);
+```
+
+## Why This Integration Works
+
+1. **Best of Both Worlds**: SDK's developer experience + Claudeware's analytics
+2. **No Interceptors Needed**: Direct composition is simpler and more powerful
+3. **Full Feature Access**: All SDK features work without modification
+4. **Superior Analytics**: Process-level tracking + message-level insights
+5. **Performance**: Zero overhead when not using analytics
 
 ## Key Benefits of Claudeware
 
@@ -68,7 +177,7 @@ npx tsx analyze-queries.ts
 ## Basic Usage Pattern
 
 ```typescript
-import { createWrappedSDK } from '@timmytown/claudeware';
+import { createWrappedSDK } from '@instantlyeasy/claudeware';
 
 // Create wrapped instance
 const wrappedClaude = createWrappedSDK({
@@ -152,6 +261,40 @@ module.exports = {
 - **Database locked**: Ensure you call `shutdown()` when done
 - **Missing metrics**: Check that plugins are loaded correctly
 - **High latency**: Verify you're not in debug mode with verbose logging
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Run the Express scaffolding demo (recommended!)
+npm run scaffold
+
+# Explore other examples
+npm run simple
+npm run advanced
+npm run analyze
+
+# Clean up generated files
+npm run clean
+```
+
+## Output from Express Scaffolding
+
+The Express scaffolding demo generates:
+- A complete Express.js service with 15+ files
+- Analytics report (`express-scaffolding-analytics.json`)
+- Claudeware database (`express-scaffolding.db`)
+- Ready-to-run project in `my-express-api/`
+
+After scaffolding:
+```bash
+cd my-express-api
+npm install
+npm run dev
+# Visit http://localhost:3000/health
+```
 
 ## Further Reading
 
